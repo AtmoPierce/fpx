@@ -1,37 +1,74 @@
-fpx — Floating-Point eXtensions
+# fpx - Floating-Point eXtensions
 
-fpx is a core-only, allocation-free Rust library for building accurate,
-deterministic mathematical functions from first principles.
-It focuses on minimax polynomial approximation, IEEE-754 correctness, and
-precise boundary-value modelling—with no dependency on the Rust standard
-library.
+`fpx` is a `no_std` / core-only Rust library focused on constructing **minimax polynomial approximations** of standard mathematical functions using **Chebyshev** and **Remez** techniques.
+The crate is designed around transparent numerical methods: explicit interval selection, boundary-value handling, and static, allocation-free coefficient storage.
 
-The crate provides:
+Although no functions are implemented yet, the project provides the mathematical and structural foundation for building accurate, deterministic, and portable math kernels entirely atop **core Rust**.
 
-Core-compatible (no_std) math kernels, suitable for embedded, kernels,
-DSP, and flight-software environments.
+The library is made public for complete auditability of the process, and finetuning for platform specificity.
 
-A math-first approach to constructing function approximations:
-explicit domain selection, boundary-value handling, and interval reduction.
+Serializable/Deserializable coefficient tables and boundaries shall also be implemented to enable extension to other languages.
 
-Optimal minimax polynomial coefficients generated using Chebyshev and
-Remez techniques.
+## Features (in progress)
 
-Predictable accuracy, deterministic behavior, and static storage only
-(const coefficients, no allocation).
+- `no_std` / core compatibility  
+- IEEE-754 bit-level utilities  
+- Deterministic polynomial evaluation (Horner, Clenshaw)  
+- Minimax coefficient generation (Chebyshev / Remez)  
+- Static `const` coefficient storage (no allocation)  
+- Clear numerical boundaries and interval reduction strategy  
 
-IEEE-754 utilities for bit-level inspection, ULP analysis, and
-reproducibility across architectures.
+## Planned Functionality
 
-fpx is intended for systems where:
+### Trigonometric
+- [ ] sin(x)
+- [ ] cos(x)
+- [ ] tan(x)
+- [ ] asin(x)
+- [ ] acos(x)
+- [ ] atan(x)
+- [ ] atan2(y, x)
+- [ ] ...
 
-the standard math library is unavailable,
+### Exponential & Logarithmic
+- [ ] exp(x)
+- [ ] exp2(x)
+- [ ] exp10(x)
+- [ ] ln(x)
+- [ ] log2(x)
+- [ ] log10(x)
+- [ ] ...
 
-the default algorithms are too slow or too unpredictable,
+### Hyperbolic
+- [ ] sinh(x)
+- [ ] cosh(x)
+- [ ] tanh(x)
+- [ ] ...
 
-or a tightly controlled numerical profile is required.
+### Reciprocal & Roots
+- [ ] 1/x
+- [ ] sqrt(x)
+- [ ] cbrt(x)
+- [ ] ...
 
-By grounding every approximation in well-defined polynomial construction and
-explicit interval bounds, fpx offers a transparent, verifiable foundation for
-sine, cosine, exponential, logarithmic, and other common functions—built
-entirely on core Rust.
+### Error & Special Functions
+- [ ] erf(x)
+- [ ] erfc(x)
+- [ ] gamma(x)
+- [ ] lgamma(x)
+- [ ] ...
+
+## Numerical Foundations
+
+### Primary References
+- William J. Cody & William Waite, *Software Manual for the Elementary Functions*, Prentence-Hall, 1980.
+- J. F. Hart et al., *Computer Approximations*, Wiley, 1968.
+- E. Y. Remez, *Sur un procédé convergent d'approximations successives pour déterminer les polynômes d'approximation*, 1934.
+
+### Additional References
+- Hart, Cheney, Lawson, Maehly, Selfridge, Wheeler, *Table of Chebyshev Approximations*, 1968.
+- Cody, "Chebyshev Approximations for the Error Function" (NIST/NASA)
+- Demanet & Ying, *On Chebyshev Interpolation of Analytic Functions*, 2010.
+
+## Status
+The current version defines the mathematical scaffold (Chebyshev basis, Remez infrastructure, coefficient layout), with function implementations planned.
