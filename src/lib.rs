@@ -4,5 +4,3 @@ pub use core::*;
 pub mod design;
 #[cfg(feature = "design")]
 pub use design::*;
-#[cfg(feature = "design")]
-pub mod comparisons;
