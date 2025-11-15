@@ -30,14 +30,14 @@ aarch64_neon = ["simd"]
 
 [dependencies]
 # No dependencies that require std or alloc.
-aether_core = { path="../aether/crates/aether_core", package = "aether_core"}
+aether_core = { git="https://github.com/AtmoPierce/aether.git", package = "aether_core"}
 num-traits = {version = "*"}
 
 [dev-dependencies]
 # Only used in tests/benches/examples that run with std, never in the library itself.
 libm = { version = "0.2", default-features = false }
-aether_test = {path="../aether/crates/aether_test"}
-aether_viz  = { path = "../aether/crates/aether_viz"}
+aether_test = { git="https://github.com/AtmoPierce/aether.git", package = "aether_test"}
+aether_viz  = { git="https://github.com/AtmoPierce/aether.git", package = "aether_viz"}
 
 #[[bench]]
 #name = "trig"
