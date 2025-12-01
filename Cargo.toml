@@ -15,33 +15,31 @@ bench = false
 crate-type = ["rlib"]
 
 [features]
-# No default features — all core only.
+# Default: core only, no std, no f16/f128, no plotting.
 default = ["core"]
-core = []
-design = []
-std = []
-plots = ["std"]
-units = []
 
-# Optional extras for specialized targets, but still no alloc.
-simd = []
-x86_sse2 = ["simd"]
-aarch64_neon = ["simd"]
+core = []
+design = []              # enables design-time stuff in *this* crate
+std = ["aether_core/std", "aether_viz/svg"]
+f16 = ["aether_core/f16"]                    # forward f16 to aether_core
+f128 = ["aether_core/f128"]                  # forward f128 to aether_core
+
+# plots require std + viz
+plots = ["dep:aether_viz"]
+
+serde = ["dep:serde", "dep:serde_json"]
 
 [dependencies]
-# No dependencies that require std or alloc.
-aether_core = { git="https://github.com/AtmoPierce/aether.git", package = "aether_core"}
-num-traits = {version = "*"}
+aether_core = {git = "https://github.com/AtmoPierce/aether.git", package = "aether_core", default-features = false}
+aether_opt = {git = "https://github.com/AtmoPierce/aether.git", package = "aether_opt", default-features = false}
+num-traits = { version = "*" }
+serde = { version = "1", features = ["derive"], optional = true }
+serde_json = { version = "1", optional = true }
+aether_viz = {git = "https://github.com/AtmoPierce/aether.git", package = "aether_viz", optional = true, default-features = false}
 
 [dev-dependencies]
-# Only used in tests/benches/examples that run with std, never in the library itself.
 libm = { version = "0.2", default-features = false }
-aether_test = { git="https://github.com/AtmoPierce/aether.git", package = "aether_test"}
-aether_viz  = { git="https://github.com/AtmoPierce/aether.git", package = "aether_viz"}
-
-#[[bench]]
-#name = "trig"
-#harness = false
+aether_test = {git = "https://github.com/AtmoPierce/aether.git", package = "aether_test"}
 
 [profile.release]
 lto = "thin"
@@ -51,7 +49,26 @@ debug = false
 strip = "symbols"
 
 [package.metadata.docs.rs]
-# Docs should still build with std for examples.
 features = ["simd"]
 rustdoc-args = ["--cfg", "docsrs"]
 targets = ["x86_64-unknown-linux-gnu", "thumbv7em-none-eabihf"]
+
+[[bench]]
+name = "f16_error"
+harness = true
+required-features = ["design", "plots", "f128"]
+
+[[bench]]
+name = "f32_error"
+harness = true
+required-features = ["design", "plots", "f128"]
+
+[[bench]]
+name = "f64_error"
+harness = true
+required-features = ["design", "plots", "f128"]
+
+[[bench]]
+name = "f128_error"
+harness = true
+required-features = ["design", "plots", "f128"]

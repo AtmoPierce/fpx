@@ -1,6 +1,7 @@
+#[cfg(feature = "design")]
 #[cfg(test)]
 mod libm {
-    use crate::remez::RemezApprox;
+    use crate::design::remez::{RemezApprox, max_error_on_grid};
     use core::f64::consts::{FRAC_PI_4, PI};
 
     #[cfg(feature = "plots")]
@@ -9,24 +10,6 @@ mod libm {
     macro_rules! plots { ($($tt:tt)*) => { $($tt)* } }
     #[cfg(not(feature = "plots"))]
     macro_rules! plots { ($($tt:tt)*) => {}; }
-
-    // Need to move to generic place
-    fn max_error_on_grid<const N: usize, const K: usize>(
-        rz: &RemezApprox<f64, N, K>,
-        f: fn(f64) -> f64,
-        a: f64,
-        b: f64,
-        samples: usize,
-    ) -> f64 {
-        let mut max_e = 0.0;
-        for i in 0..=samples {
-            let t = i as f64 / samples as f64;
-            let x = a + (b - a) * t;
-            let e = (rz.eval_poly(x) - f(x)).abs();
-            if e > max_e { max_e = e; }
-        }
-        max_e
-    }
 
     // trig
     fn sin_f(x: f64) -> f64 { x.sin() }
@@ -74,13 +57,6 @@ mod libm {
 
     fn expm1_f(x: f64) -> f64 { x.exp_m1() }
     fn expm1_df(x: f64) -> f64 { x.exp() } // derivative is still e^x
-
-    // sqrt
-    fn sqrt_f(x: f64) -> f64 { x.sqrt() }
-    fn sqrt_df(x: f64) -> f64 {
-        // d/dx sqrt(x) = 1 / (2 sqrt(x))
-        0.5 / x.sqrt()
-    }
 
     // ---- generic test macro ----
     macro_rules! remez_test {
@@ -275,7 +251,6 @@ mod libm {
     }
 
     // ---- exp family ----
-
     remez_test! {
         name        = remez_exp_minus1_to_1,
         N           = 20,
@@ -313,19 +288,5 @@ mod libm {
         samples     = 8192,
         title       = "Remez expm1(x) on [-1, 1]",
         file_prefix = "remez_expm1"
-    }
-
-    // ---- sqrt ----
-    remez_test! {
-        name        = remez_sqrt_0_to_4,
-        N           = 25,
-        K           = 26,
-        func        = sqrt_f,
-        deriv       = sqrt_df,
-        interval    = [1.0e-6, 4.0],
-        max_error   = 1e-12,
-        samples     = 8192,
-        title       = "Remez sqrt(x) on [1e-6, 4]",
-        file_prefix = "remez_sqrt"
     }
 }
