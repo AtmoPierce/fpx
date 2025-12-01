@@ -16,14 +16,14 @@ pub struct UnpackedE3 {
     pub is_subnormal: bool,
 }
 #[derive(Copy, Clone, Debug)]
-pub struct Unpacked6 {
+pub struct UnpackedE4 {
     pub sign:           i8,   // +1 or -1
-    pub exp:            i8,   // unbiased exponent
+    pub exp:            i16,  // unbiased exponent
     pub mant:           u16,  // Representation is dependent on fp type
-    pub is_zero:        bool, // Convenience 
+    pub is_zero:        bool, // Convenience
     pub is_subnormal:   bool, // Convenience
+    pub is_nan:         bool, // Convenience
 }
-
 #[derive(Copy, Clone, Debug)]
 pub struct UnpackedE5 {
     pub sign:           i8,   // +1 or -1
@@ -34,13 +34,12 @@ pub struct UnpackedE5 {
     pub is_inf:         bool, // Convenience
     pub is_nan:         bool, // Convenience
 }
-
 #[derive(Copy, Clone, Debug)]
-pub struct UnpackedE4 {
+pub struct Unpacked6 {
     pub sign:           i8,   // +1 or -1
-    pub exp:            i16,  // unbiased exponent
+    pub exp:            i8,   // unbiased exponent
     pub mant:           u16,  // Representation is dependent on fp type
-    pub is_zero:        bool, // Convenience
+    pub is_zero:        bool, // Convenience 
     pub is_subnormal:   bool, // Convenience
-    pub is_nan:         bool, // Convenience
 }
+
